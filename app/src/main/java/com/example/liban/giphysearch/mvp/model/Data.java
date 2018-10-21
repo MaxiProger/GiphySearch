@@ -1,4 +1,4 @@
-package com.example.liban.giphysearch.dto;
+package com.example.liban.giphysearch.mvp.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

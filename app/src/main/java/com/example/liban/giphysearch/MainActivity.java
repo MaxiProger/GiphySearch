@@ -1,23 +1,26 @@
 package com.example.liban.giphysearch;
 
 import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.liban.giphysearch.dto.ListData;
+import com.example.liban.giphysearch.mvp.model.ListData;
 import com.example.liban.giphysearch.mvp.presenter.Presenter;
 import com.example.liban.giphysearch.mvp.view.MainView;
 
-public class MainActivity extends AppCompatActivity implements MainView {
+public class MainActivity extends AppCompatActivity implements MainView, MenuItemCompat.OnActionExpandListener {
 
     private static final String TAG = "MainActivity";
     private RecyclerView mRecyclerView;
@@ -41,21 +44,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mPresenter = new Presenter(this, this);
+
+        bind();
+        initListeners();
+    }
+
+    private void bind(){
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView = findViewById(R.id.recycler_id);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mEditText = findViewById(R.id.edit_search_query_id);
         mTextView = findViewById(R.id.status_text_id);
         mSwipeRefreshLayout = findViewById(R.id.swipe_id);
-        initListeners();
+        mPresenter = new Presenter(this, this);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
 
     }
-
-
     private void initListeners() {
-        mEditText.addTextChangedListener(new AddListenerTextChanged(mPresenter));
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             mPresenter.refresh();
         });
@@ -89,23 +95,26 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private int mOffsetCount = 0;
 
-    private void onScrollRecycler(final ListData listData, AddListener addListener) {
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mainsearch, menu);
+        MenuItem mSearch = menu.findItem(R.id.action_search);
+        SearchView mSearchView = (SearchView) mSearch.getActionView();
+        mSearchView.setQueryHint("Search");
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (!recyclerView.canScrollVertically(1)) {
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-                    if (mRecyclerAdapter.isTrendingContains()) {
-                        addListener.onEnd();
-                        mRecyclerAdapter.addNewGifs(listData.getData());
-                    }
-
-                }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mPresenter.requestSearch(newText,0);
+                return true;
             }
         });
+        return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public void onRequestSearch(ListData listDataSearch) {
@@ -142,4 +151,31 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
 
+    private void onScrollRecycler(final ListData listData, AddListener addListener) {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
+
+                    if (mRecyclerAdapter.isTrendingContains()) {
+                        addListener.onEnd();
+                        mRecyclerAdapter.addNewGifs(listData.getData());
+                    }
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        mPresenter.requestTrending(0);
+        return true;
+    }
 }

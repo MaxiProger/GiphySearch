@@ -2,8 +2,8 @@ package com.example.liban.giphysearch;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +12,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
-import com.example.liban.giphysearch.dto.Data;
-import com.example.liban.giphysearch.dto.ListData;
-import com.example.liban.giphysearch.mvp.model.DataSource;
+import com.example.liban.giphysearch.mvp.model.Data;
+import com.example.liban.giphysearch.mvp.model.ListData;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +23,7 @@ import java.util.List;
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private ListData mListData;
+    private ListData mListData=null;
     private Context mContext;
     private boolean isTrendingContains;
 
@@ -41,6 +39,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         isTrendingContains = trendingContains;
     }
 
+    public void addData(ListData listData) {
+        mListData = listData;
+        notifyDataSetChanged();
+    }
 
     public RecyclerAdapter(ListData listData, Context context) {
         mListData = listData;
@@ -68,6 +70,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
 
 
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        
     }
 
     public void addNewGifs(List<Data> newGifsData) {

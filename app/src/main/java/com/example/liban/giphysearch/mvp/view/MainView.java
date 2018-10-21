@@ -1,6 +1,6 @@
 package com.example.liban.giphysearch.mvp.view;
 
-import com.example.liban.giphysearch.dto.ListData;
+import com.example.liban.giphysearch.mvp.model.ListData;
 
 /**
  * Created by liban on 15.08.2018.

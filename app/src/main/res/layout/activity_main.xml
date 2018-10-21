@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <EditText
-        android:id="@+id/edit_search_query_id"
+    <android.support.v7.widget.Toolbar
+        app:titleTextColor="@color/colorWhite"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimaryDark"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/start_typing" />
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.Toolbar>
     <TextView
         android:id="@+id/status_text_id"
         android:layout_width="wrap_content"
@@ -22,6 +24,7 @@
         android:layout_weight="1">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_id"
+            android:background="#f0f0f0"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
