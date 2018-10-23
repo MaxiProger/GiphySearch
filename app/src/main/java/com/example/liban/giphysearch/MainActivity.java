@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainView, MenuIte
         onScrollRecycler(listData, new AddListener() {
             @Override
             public void onEnd() {
-                mOffsetCount += 25;
+                mOffsetCount = 10;
                 mPresenter.requestTrending(mOffsetCount);
             }
         });
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MainView, MenuIte
         mTextView.setText(getResources().getString(R.string.search_gif));
         mRecyclerAdapter.clearData();
         mRecyclerAdapter.addNewGifs(listDataSearch.getData());
-        mRecyclerAdapter.setTrendingContains(false);
+        mRecyclerAdapter.setTrendingContains(true);
 
     }
 

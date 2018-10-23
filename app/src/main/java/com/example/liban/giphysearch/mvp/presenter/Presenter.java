@@ -1,6 +1,7 @@
 package com.example.liban.giphysearch.mvp.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.liban.giphysearch.Api;
 import com.example.liban.giphysearch.mvp.model.Constants;
@@ -32,6 +33,7 @@ public class Presenter {
 
 
     public void requestTrending(int offset) {
+        Log.e("OFFSET", String.valueOf(offset));
         getTrendingsObservable(offset).subscribeWith(getTrendingsObserver(Constants.TRENDINGS));
     }
 
@@ -68,6 +70,7 @@ public class Presenter {
             public void onNext(ListData listData) {
                 mView.showProgress(false);
                 mView.onRequestSearch(listData);
+                dispose();
             }
 
             @Override
@@ -91,6 +94,7 @@ public class Presenter {
             public void onNext(ListData listData) {
                 mView.showProgress(false);
                 mView.onRequestTrending(listData);
+                dispose();
             }
 
             @Override

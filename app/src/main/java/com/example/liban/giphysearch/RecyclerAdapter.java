@@ -69,7 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     }
-    
+
     public void addNewGifs(List<Data> newGifsData) {
         mListData.getData().addAll(newGifsData);
         notifyDataSetChanged();
