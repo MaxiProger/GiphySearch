@@ -2,7 +2,6 @@ package com.example.liban.giphysearch;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +20,7 @@ import com.example.liban.giphysearch.mvp.model.ListData;
 import com.example.liban.giphysearch.mvp.presenter.Presenter;
 import com.example.liban.giphysearch.mvp.view.MainView;
 
-public class MainActivity extends AppCompatActivity implements MainView, MenuItemCompat.OnActionExpandListener {
+public class MainActivity extends AppCompatActivity implements MainView {
 
     private static final String TAG = "MainActivity";
     private RecyclerView mRecyclerView;
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MainView, MenuIte
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mTextView;
     private boolean isRefresh;
+    private LinearLayout mLinearLayout;
 
     public void setRefresh(boolean refresh) {
         isRefresh = refresh;
@@ -168,14 +169,4 @@ public class MainActivity extends AppCompatActivity implements MainView, MenuIte
     }
 
 
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        mPresenter.requestTrending(0);
-        return true;
-    }
 }

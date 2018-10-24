@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.liban.giphysearch.DetailGif">
+    <android.support.v7.widget.Toolbar
+        app:titleTextColor="#f0f0f0"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.Toolbar>
+    <ProgressBar
+        android:id="@+id/id_bar_detail"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="visible"/>
+
 
     <ImageView
         android:id="@+id/big_gif_id"

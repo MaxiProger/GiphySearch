@@ -3,6 +3,7 @@ package com.example.liban.giphysearch;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.liban.giphysearch.mvp.model.Data;
 import com.example.liban.giphysearch.mvp.model.ListData;
 
@@ -21,7 +26,7 @@ import java.util.List;
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private ListData mListData=null;
+    private ListData mListData;
     private Context mContext;
     private boolean isTrendingContains;
 
@@ -37,10 +42,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         isTrendingContains = trendingContains;
     }
 
-    public void addData(ListData listData) {
-        mListData = listData;
-        notifyDataSetChanged();
-    }
 
     public RecyclerAdapter(ListData listData, Context context) {
         mListData = listData;
@@ -59,14 +60,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Glide.with(mContext)
                 .asGif()
-                .load(Uri.parse(mListData.getData().get(position)
-                        .getImages().getFixedHeight().getUrl()))
+                .load(Uri.parse(mListData.getData().get(position).getImages().getFixedHeightDownsampled().getUrl()))
+                .listener(new RequestListener<GifDrawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
+                    @Override
+                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                        holder.mProgressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .into(holder.mImageView);
-        if (!(holder.mImageView.getDrawable() == null)) {
-            holder.mProgressBar.setVisibility(View.GONE);
-        }
-
+        
 
     }
 
